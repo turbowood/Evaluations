@@ -1,0 +1,13 @@
+name: Evaluation
+version: '1.0'
+main: zxc.Razzberry.plugins.evaluation.Evaluation
+api-version: '1.18'
+prefix: HardCore
+authors: [ Razzberry ]
+description: A simple evaluation system right on the server.
+commands:
+  evaluation:
+    usage: /ev help
+    aliases: ev
+  rate:
+    usage: Usage - /rate <0 .. 10> <comment>
