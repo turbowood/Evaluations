@@ -9,5 +9,7 @@ commands:
   evaluation:
     usage: /ev help
     aliases: ev
+    permission: evaluation.command
   rate:
     usage: Usage - /rate <0 .. 10> <comment>
+    permission: evaluation.rate

@@ -16,38 +16,56 @@ public class EvaluationCommand implements CommandExecutor {
 
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
-        if (args[0].equalsIgnoreCase("help")) {
-            if (!sender.hasPermission("evaluation.help")) {
-                sender.sendMessage(noPermission);
-                return true;
-            }
 
-            sender.sendMessage(withColor("&e---------------"));
-            sender.sendMessage("");
-            sender.sendMessage(withColor("&6/ev help &f- this page."));
-            sender.sendMessage(withColor("&6/rate <0 .. 10> <comment> &f- rate the server"));
-            sender.sendMessage(withColor("&6/ev find <player> &f- See the player's opinion"));
-            sender.sendMessage("");
-            sender.sendMessage(withColor("&e---------------"));
+        if (args.length == 0 || args[0] == null || args[0].isEmpty()) {
+            return false;
         }
-        else if (args[0].equalsIgnoreCase("find")) {
-            if (!sender.hasPermission("evaluation.find")) {
-                sender.sendMessage(noPermission);
-                return true;
-            }
 
-            if (args[1].isEmpty()) {
+        switch (args[0].toLowerCase()) {
+            case "help": {
+                sendHelp(sender);
+                break;
+            }
+            case "find": {
+                if (args.length < 2) {
+                    return false;
+                }
+                if (isValidArgs(sender, args[1])) {
+                    findPlayer(sender, args[1]);
+                } else return false;
+                break;
+            }
+            default: {
                 return false;
             }
-            String uuid = Bukkit.getPlayer(args[1]).getUniqueId().toString();
-
-            sender.sendMessage(withColor("&eUUID: &6" + uuid));
-            sender.sendMessage("");
-            sender.sendMessage(withColor("&eName: &f" + args[1]));
-            sender.sendMessage(withColor("&eRate: &f" + evaluations.getInt(uuid + ".rate", -1)));
-            sender.sendMessage(withColor("&eComment: &f" + evaluations.getString(uuid + ".text", "Не найдено")));
-            sender.sendMessage("");
         }
         return true;
+    }
+
+    public void findPlayer(CommandSender sender, String name) {
+        String uuid = Bukkit.getPlayer(name).getUniqueId().toString();
+        if (sender.hasPermission("evaluation.find.uuid")) sender.sendMessage(withColor("&eUUID: &6" + uuid));
+        sender.sendMessage("");
+        sender.sendMessage(withColor("&eName: &f" + name));
+        sender.sendMessage(withColor("&eRate: &f" + evaluations.getInt(uuid + ".rate", -1)));
+        sender.sendMessage(withColor("&eComment: &f" + evaluations.getString(uuid + ".text", "Не найдено")));
+        sender.sendMessage("");
+    }
+
+    private boolean isValidArgs(CommandSender sender, String arg) {
+        if (arg.isEmpty()) {
+            return false;
+        }
+        return true;
+    }
+
+    private void sendHelp(CommandSender sender) {
+        sender.sendMessage(withColor("&e---------------"));
+        sender.sendMessage("");
+        sender.sendMessage(withColor("&6/ev help &f- this page."));
+        sender.sendMessage(withColor("&6/rate <0 .. 10> <comment> &f- rate the server"));
+        sender.sendMessage(withColor("&6/ev find <player> &f- See the player's opinion"));
+        sender.sendMessage("");
+        sender.sendMessage(withColor("&e---------------"));
     }
 }

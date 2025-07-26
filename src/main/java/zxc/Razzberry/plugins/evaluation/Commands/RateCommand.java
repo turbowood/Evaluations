@@ -22,12 +22,8 @@ public class RateCommand implements CommandExecutor {
             sender.sendMessage("Not from you :D");
             return true;
         }
-        Player player = (Player) sender;
 
-        if (!player.hasPermission("evaluation.rate")) {
-            player.sendMessage(noPermission);
-            return true;
-        }
+        Player player = (Player) sender;
 
         int rate = 0;
         try {
@@ -54,12 +50,12 @@ public class RateCommand implements CommandExecutor {
 
         player.sendMessage("You have left a review about the server, thank you! (" + rate + "/10)");
         player.sendMessage("Text: " + builder.toString());
-        saveReview(player.getUniqueId().toString(), rate, builder.toString());
+        saveReview(player.getUniqueId().toString(), rate, builder.toString(), player);
 
         return true;
     }
 
-    private void saveReview(String uuid, int rate, String comment) {
+    private void saveReview(String uuid, int rate, String comment, Player player) {
         if (evaluations.contains(uuid + ".rate")) {
             int oldRate = evaluations.getInt(uuid + ".rate", -1);
             if (allrate.contains(oldRate)) {
@@ -67,7 +63,7 @@ public class RateCommand implements CommandExecutor {
             }
         }
 
-        evaluations.set(uuid + ".nickname", Bukkit.getPlayer(uuid).getName());
+        evaluations.set(uuid + ".nickname", Bukkit.getPlayer(player.getUniqueId()).getName());
         evaluations.set(uuid + ".rate", rate);
         evaluations.set(uuid + ".text", comment);
         allrate.add(rate);
