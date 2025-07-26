@@ -12,6 +12,8 @@ import static zxc.Razzberry.plugins.evaluation.Evaluation.withColor;
 public class EvaluationCommand implements CommandExecutor {
 
     ConfigHelper evaluations = Evaluation.getEvaluations();
+    ConfigHelper config = Evaluation.getConfigHelper();
+    ConfigHelper messages = Evaluation.getMessages();
 
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
@@ -33,6 +35,10 @@ public class EvaluationCommand implements CommandExecutor {
                     findPlayer(sender, args[1]);
                 } else return false;
                 break;
+            }
+            case "reload": {
+                config.reload();
+                messages.reload();
             }
             default: {
                 return false;

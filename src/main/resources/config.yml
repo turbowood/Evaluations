@@ -1,1 +1,6 @@
+Telegram:
+  enable: false
+  token: ''
+  chat-id: ''
+
 all:

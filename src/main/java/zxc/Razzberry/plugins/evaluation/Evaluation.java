@@ -15,7 +15,9 @@ public final class Evaluation extends JavaPlugin {
     private static ConfigHelper evaluations;
     private static ConfigHelper messages;
 
+    public static TelegramNotifier telegram;
     public static List<Integer> allrate = new ArrayList<>();
+    public static Boolean tgEnable = config.getBoolean("Telegram.enable", false);
 
     @Override
     public void onEnable() {
@@ -23,6 +25,10 @@ public final class Evaluation extends JavaPlugin {
         config = new ConfigHelper(this, "config.yml");
         evaluations = new ConfigHelper(this, "evaluations.yml");
         messages = new ConfigHelper(this, "messages.yml");
+
+        telegram = new TelegramNotifier(this,
+            config.getString("Telegram.token", "none"),
+                config.getString("Telegram.chat-id", "none"));
 
         allrate = config.getIntegerList("all");
 

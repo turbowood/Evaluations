@@ -63,13 +63,17 @@ public class RateCommand implements CommandExecutor {
             }
         }
 
-        evaluations.set(uuid + ".nickname", Bukkit.getPlayer(player.getUniqueId()).getName());
+        String namePlayer = Bukkit.getPlayer(player.getUniqueId()).getName();
+        evaluations.set(uuid + ".nickname", namePlayer);
         evaluations.set(uuid + ".rate", rate);
         evaluations.set(uuid + ".text", comment);
         allrate.add(rate);
 
         evaluations.set("arithmetic-mean", Math.round(getAverage(allrate) * 10) / 10.0);
         config.set("all", allrate);
+
+        if (tgEnable)
+            telegram.sendToTelegram("New rate!\nName: " + namePlayer + "\nRate: " + rate + "\nComment: " + comment);
     }
 
     private double getAverage(List<Integer> numbers) {
