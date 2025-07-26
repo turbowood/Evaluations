@@ -77,4 +77,8 @@ public class ConfigHelper {
         config.set(path, value);
         save(); // Автосохранение (можно убрать, если не нужно)
     }
+
+    public boolean contains(String content) {
+        return config.contains(content);
+    }
 }

@@ -1,5 +1,6 @@
 package zxc.Razzberry.plugins.evaluation.Commands;
 
+import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -21,8 +22,10 @@ public class RateCommand implements CommandExecutor {
             sender.sendMessage("Not from you :D");
             return true;
         }
-        else if (!sender.hasPermission("evaluation.rate")) {
-            sender.sendMessage(noPermission);
+        Player player = (Player) sender;
+
+        if (!player.hasPermission("evaluation.rate")) {
+            player.sendMessage(noPermission);
             return true;
         }
 
@@ -31,7 +34,7 @@ public class RateCommand implements CommandExecutor {
             rate = Integer.parseInt(args[0]);
         }
         catch (NumberFormatException e) {
-            sender.sendMessage(withColor("&cYou have not entered a rating from 0 to 10!"));
+            player.sendMessage(withColor("&cYou have not entered a rating from 0 to 10!"));
             return false;
         }
         catch (ArrayIndexOutOfBoundsException e) {
@@ -39,7 +42,7 @@ public class RateCommand implements CommandExecutor {
         }
 
         if (rate < 0 || rate > 10) {
-            sender.sendMessage(withColor("&cNumber from 0 to 10!"));
+            player.sendMessage(withColor("&cNumber from 0 to 10!"));
             return false;
         }
 
@@ -49,18 +52,24 @@ public class RateCommand implements CommandExecutor {
             if (!(i == args.length - 1)) builder.append(" ");
         }
 
-        sender.sendMessage("You have left a review about the server, thank you! (" + rate + "/10)");
-        sender.sendMessage("Text: " + builder.toString());
-        saveReview(sender.getName(), rate, builder.toString());
+        player.sendMessage("You have left a review about the server, thank you! (" + rate + "/10)");
+        player.sendMessage("Text: " + builder.toString());
+        saveReview(player.getUniqueId().toString(), rate, builder.toString());
 
         return true;
     }
 
-    private void saveReview(String name, int rate, String comment) {
-        evaluations.set(name, null);
-        evaluations.set(name + ".rate", rate);
-        evaluations.set(name + ".text", comment);
+    private void saveReview(String uuid, int rate, String comment) {
+        if (evaluations.contains(uuid + ".rate")) {
+            int oldRate = evaluations.getInt(uuid + ".rate", -1);
+            if (allrate.contains(oldRate)) {
+                allrate.remove((Integer) oldRate);
+            }
+        }
 
+        evaluations.set(uuid + ".nickname", Bukkit.getPlayer(uuid).getName());
+        evaluations.set(uuid + ".rate", rate);
+        evaluations.set(uuid + ".text", comment);
         allrate.add(rate);
 
         evaluations.set("arithmetic-mean", Math.round(getAverage(allrate) * 10) / 10.0);

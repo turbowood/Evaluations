@@ -1,5 +1,6 @@
 package zxc.Razzberry.plugins.evaluation.Commands;
 
+import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -35,16 +36,17 @@ public class EvaluationCommand implements CommandExecutor {
                 return true;
             }
 
-            if (args[1].isEmpty() || args[1] == null) {
+            if (args[1].isEmpty()) {
                 return false;
             }
+            String uuid = Bukkit.getPlayer(args[1]).getUniqueId().toString();
 
-            sender.sendMessage(withColor("&ePlayer: &6" + args[1]));
+            sender.sendMessage(withColor("&eUUID: &6" + uuid));
             sender.sendMessage("");
             sender.sendMessage(withColor("&eName: &f" + args[1]));
-            sender.sendMessage(withColor("&eRate: &f" + evaluations.getInt(args[1] + ".rate", -1)));
-            sender.sendMessage(withColor("&eComment: &f" + evaluations.getString(args[1] + ".text", "none")));
-            sender.sendMessage(withColor(""));
+            sender.sendMessage(withColor("&eRate: &f" + evaluations.getInt(uuid + ".rate", -1)));
+            sender.sendMessage(withColor("&eComment: &f" + evaluations.getString(uuid + ".text", "Не найдено")));
+            sender.sendMessage("");
         }
         return true;
     }
