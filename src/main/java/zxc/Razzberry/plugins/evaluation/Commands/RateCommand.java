@@ -15,11 +15,12 @@ import static zxc.Razzberry.plugins.evaluation.Evaluation.*;
 public class RateCommand implements CommandExecutor {
     ConfigHelper evaluations = Evaluation.getEvaluations();
     ConfigHelper config = Evaluation.getConfigHelper();
+    ConfigHelper messages = Evaluation.getMessages();
 
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
         if (!(sender instanceof Player)) {
-            sender.sendMessage("Not from you :D");
+            sender.sendMessage(withColor(messages.getString("noPlayer", "Not from you :D")));
             return true;
         }
 
@@ -30,7 +31,7 @@ public class RateCommand implements CommandExecutor {
             rate = Integer.parseInt(args[0]);
         }
         catch (NumberFormatException e) {
-            player.sendMessage(withColor("&cYou have not entered a rating from 0 to 10!"));
+            player.sendMessage(withColor(messages.getString("error-rate", "You have not entered a rating from 0 to 10!")));
             return false;
         }
         catch (ArrayIndexOutOfBoundsException e) {
@@ -38,7 +39,7 @@ public class RateCommand implements CommandExecutor {
         }
 
         if (rate < 0 || rate > 10) {
-            player.sendMessage(withColor("&cNumber from 0 to 10!"));
+            player.sendMessage(withColor(messages.getString("error-rate", "You have not entered a rating from 0 to 10!")));
             return false;
         }
 
@@ -48,8 +49,7 @@ public class RateCommand implements CommandExecutor {
             if (!(i == args.length - 1)) builder.append(" ");
         }
 
-        player.sendMessage("You have left a review about the server, thank you! (" + rate + "/10)");
-        player.sendMessage("Text: " + builder.toString());
+        player.sendMessage(withColor(messages.getString("ready-rate", "You have left a review about the server, thank you!")));
         saveReview(player.getUniqueId().toString(), rate, builder.toString(), player);
 
         return true;

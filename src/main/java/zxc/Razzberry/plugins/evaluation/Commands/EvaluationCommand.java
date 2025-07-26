@@ -7,7 +7,6 @@ import org.bukkit.command.CommandSender;
 import zxc.Razzberry.plugins.evaluation.ConfigHelper;
 import zxc.Razzberry.plugins.evaluation.Evaluation;
 
-import static zxc.Razzberry.plugins.evaluation.Evaluation.noPermission;
 import static zxc.Razzberry.plugins.evaluation.Evaluation.withColor;
 
 public class EvaluationCommand implements CommandExecutor {
@@ -48,7 +47,7 @@ public class EvaluationCommand implements CommandExecutor {
         sender.sendMessage("");
         sender.sendMessage(withColor("&eName: &f" + name));
         sender.sendMessage(withColor("&eRate: &f" + evaluations.getInt(uuid + ".rate", -1)));
-        sender.sendMessage(withColor("&eComment: &f" + evaluations.getString(uuid + ".text", "Не найдено")));
+        sender.sendMessage(withColor("&eComment: &f" + evaluations.getString(uuid + ".text", "Unknown")));
         sender.sendMessage("");
     }
 

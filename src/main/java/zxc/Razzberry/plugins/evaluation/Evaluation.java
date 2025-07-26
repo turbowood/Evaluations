@@ -13,8 +13,7 @@ public final class Evaluation extends JavaPlugin {
     private static Evaluation instance;
     private static ConfigHelper config;
     private static ConfigHelper evaluations;
-
-    public static String noPermission = "No permission!";
+    private static ConfigHelper messages;
 
     public static List<Integer> allrate = new ArrayList<>();
 
@@ -23,6 +22,7 @@ public final class Evaluation extends JavaPlugin {
         instance = this;
         config = new ConfigHelper(this, "config.yml");
         evaluations = new ConfigHelper(this, "evaluations.yml");
+        messages = new ConfigHelper(this, "messages.yml");
 
         allrate = config.getIntegerList("all");
 
@@ -41,6 +41,10 @@ public final class Evaluation extends JavaPlugin {
 
     public static ConfigHelper getEvaluations() {
         return evaluations;
+    }
+
+    public static ConfigHelper getMessages() {
+        return messages;
     }
 
     public static Evaluation getInstance() {
